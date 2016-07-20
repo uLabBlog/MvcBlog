@@ -1,0 +1,88 @@
+﻿@model List<_Proje_Blog_.Models.ModelComment>
+@{
+    ViewBag.Title = "ListComment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ListComment</h2>
+
+<div class="container">
+    <table class="table table-hover table-responsive">
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Makale</th>
+            <th>Içerik</th>
+            <th>E-Mail</th>
+            <th>Tarih</th>
+            <th>Durum</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.ArticleName</td>
+                <td>@item.Content</td>
+                <td>@item.Email</td>
+                <td>@item.InsertDate</td>
+                <td>@Html.CheckBox("Approve", item.Approve, new { id = item.Id, @class = "CommentApprove" })</td>
+                <td>
+                    <button class="btn btn-danger comment_Sil" type="button" title="Sil" data-id="@item.Id">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script>
+    //Yorum Onaylama
+    $('.CommentApprove').click(function () {
+
+        var obj = $(this);
+        var articleId = obj.attr("id");
+        debugger;
+
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("CommentApproveControl", "Admin")',
+            data: { id: articleId },
+            success: function (result) {
+                if (result == "TRUE") {
+                    alert("Yorum Aktif Edildi...")
+                }
+                else {
+                    alert("Yorum Pasif Edildi....")
+                }
+            },
+            failure: function () {
+                alert("Durum işlmei şuanda gerçekletirilemiyor.")
+            }
+        });
+    });
+    //Yorum Silme
+    
+    $('button.comment_Sil').click(function () {
+        debugger;
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Kesin silinsin mi");
+        
+        if (c) {
+            $.ajax({
+                url: "/Admin/DeleteComment",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result == "OK") {
+                        obj.parent().parent().fadeOut(500);
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+</script>

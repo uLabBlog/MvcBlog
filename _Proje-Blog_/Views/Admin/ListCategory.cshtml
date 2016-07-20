@@ -1,0 +1,213 @@
+﻿@model List<_Proje_Blog_.Models.ModelCategory>
+@{
+    ViewBag.Title = "ListCategory";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ListCategory</h2>
+
+<div class="container">
+    <button class="btn btn-primary Category_Create" type="button" title="Kategori Ekle">
+        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Yeni Kategori
+    </button>
+
+    <div class="form-group">
+        <button class="btn btn-primary Category_Save" type="button" title="Kategori Kaydet">
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Kategori Kaydet
+        </button>
+        <button class="btn btn-danger Category_Cancel" type="button" title="Kategori Kaydet Iptal">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+        </button><br /><br />
+        <label class="control-label" for="focusedInput">Kategori İsmi</label>
+        <input class="form-control" id="KategoriName" name="KategoriName" type="text" @*value="Kategori ismi Giriniz..."*@ placeholder="Kategori ismi Giriniz...">
+    </div>
+
+    <table class="table table-hover table-responsive">
+        <tr>
+            <th>ID</th>
+            <th>Kategori Adı</th>
+            <th>Makale Sayısı</th>
+            <th>Sil</th>
+            <th>Düzenle</th>
+        </tr>
+        <tbody id="veriler">
+            @foreach (var item in Model)
+            {
+                <tr id="@Html.Raw(string.Format("{0}_tr",item.Id))">
+                    <td>@item.Id</td>
+                    <td >
+                        <span id="@Html.Raw(string.Format("{0}_name",item.Id))">@item.Name</span>
+                        <form style="display:none" class="ajaxForm" id="@Html.Raw(string.Format("{0}_nameForm",item.Id))" method="post">
+
+                            <input type="text" style="width:150px;" class="form-control" name="@Html.Raw(string.Format("{0}_TextNameForm",item.Id))" id="@Html.Raw(string.Format("{0}_TextNameForm",item.Id))" value="@item.Name" />
+
+                        </form>
+                    </td>
+                    <td>@item.ArticleId</td>
+                    <td>
+                        <button class="btn btn-danger Category_Sil" type="button" title="Sil" data-id="@item.Id" id="@Html.Raw(string.Format("{0}_buttonSil",item.Id))">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-danger Category_Iptal" type="button" title="İşlem İptal" data-id="@item.Id" id="@Html.Raw(string.Format("{0}_buttonIptal",item.Id))">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-success Category_Duzenle" type="button" title="Düzenle" data-id="@item.Id" id="@Html.Raw(string.Format("{0}_buttonDuzenle",item.Id))">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-primary Category_Kaydet"  type="button" title="Kaydet" data-id="@item.Id" id="@Html.Raw(string.Format("{0}_buttonKaydet",item.Id))">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $('button.Category_Iptal').click(function () {
+        debugger;
+        var obj = $(this);
+
+        var id = obj.attr("data-id");
+
+        $('#' + id + '_name').show();
+        $('#' + id + '_nameForm').hide();
+
+        $('#' + id + '_buttonDuzenle').show();
+        $('#' + id + '_buttonKaydet').hide();
+
+        $('#' + id + '_buttonSil').show();
+        $('#' + id + '_buttonIptal').hide();
+    })
+
+    $('button.Category_Kaydet').click(function () {
+        debugger;
+
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var yeniKAtAd = $('input[name= '+ id + '_TextNameForm]').val();
+        debugger;
+
+        $('#' + id + '_nameForm').submit(function (ev) {
+
+            debugger;
+            var postData = $(this).serializeArray();
+            var kate=postData.value
+            $.ajax({
+                type: "POST",
+                url: "/Admin/CategoryDuzenleme",
+                data: { yeniAd: yeniKAtAd, id:id },
+                success: function (result) {
+                    if (result == "OK") {
+                        
+                        $('#' + id + '_tr').html('<td>' + id + '</td><td>' + yeniKAtAd + '</td><td>' + 0 + '</td><td> <button class="btn btn-danger Category_Sil" type="button" title="Sil" data-id="' + id + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button> <button style="display:none;" class="btn btn-danger Category_Iptal" type="button" title="İşlem İptal"  data-id="' + id + '" id="' + id + '_buttonIptal"><i class="fa fa-ban" aria-hidden="true"></i></button></td> <td> <button class="btn btn-success Category_Duzenle" type="button" title="Düzenle"  data-id="' + id + '" id="' + id + '_buttonDuzenle"><i class="fa fa-pencil" aria-hidden="true"></i></button> <button style="display:none;" class="btn btn-primary Category_Kaydet" type="button" title="Kaydet" data-id="' + id + '" id="' + id + '_buttonKaydet"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>');
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    
+                }
+            });
+            ev.preventDefault(); 
+            
+        });
+
+        $('#' + id + '_nameForm').submit();
+    });
+
+    $(document).on('click', 'button.Category_Sil', function () {
+        debugger;
+
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Kesin silinsin mi");
+
+        if (c) {
+            $.ajax({
+                url: "/Admin/DeleteCategory",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result == "OK") {
+                        obj.parent().parent().fadeOut(500);
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+    $(document).on('click', 'button.Category_Duzenle', function () {
+        debugger;
+        var obj = $(this);
+
+        var id = obj.attr("data-id");
+
+        $('#' + id + '_name').hide();
+        $('#' + id + '_nameForm').show();
+
+        $('#' + id + '_buttonDuzenle').hide();
+        $('#' + id + '_buttonKaydet').show();
+
+        $('#' + id + '_buttonSil').hide();
+        $('#' + id + '_buttonIptal').show();
+
+    });
+
+    $(document).ready(function () {
+        $('div.form-group').hide();
+        $('button.Category_Kaydet').hide();
+        $('button.Category_Iptal').hide();
+    });
+    $('button.Category_Create').click(function () {
+        $('div.form-group').show(1000);
+        $('button.Category_Create').hide();
+    });
+    $('button.Category_Save').click(function () {
+        debugger;
+        var kategoriName = $("input[name=KategoriName]").val();
+        var obj = $(this);
+        var c = confirm("Kategori Eklensin mi?");
+
+        if (c) {
+            $.ajax({
+                url: "/Admin/CategoriEkle",
+                type: "post",
+                data: { kategoriName: kategoriName },
+                success: function (result) {
+                    if (result == "FAIL") {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                    else {
+                        
+
+                        $('.container tbody#veriler').append('<tr><td>' + result + '</td><td>' + kategoriName + '</td><td>' + 0 + '</td><td> <button class="btn btn-danger Category_Sil" type="button" title="Sil" data-id="' + result + '"><i class="fa fa-trash-o" aria-hidden="true"></i></button> <button style="display:none;" class="btn btn-danger Category_Iptal" type="button" title="İşlem İptal"  data-id="' + result + '" id="' + result + '_buttonIptal"><i class="fa fa-ban" aria-hidden="true"></i></button></td> <td> <button class="btn btn-success Category_Duzenle" type="button" title="Düzenle"  data-id="' + result + '" id="' + result + '_buttonDuzenle"><i class="fa fa-pencil" aria-hidden="true"></i></button> <button style="display:none;" class="btn btn-primary Category_Kaydet" type="button" title="Kaydet" data-id="' + result + '" id="' + result + '_buttonKaydet"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td></tr>');
+                    }
+                }
+            });
+        }
+    });
+    //$('button.Category_Duzenle').click(function () {
+    //    debugger;
+    //    var obj = $(this);
+
+    //    var id = obj.attr("data-id");
+
+    //    $('#' + id + '_name').hide();
+    //    $('#' + id + '_nameForm').show();
+
+    //    $('#' + id + '_buttonDuzenle').hide();
+    //    $('#' + id + '_buttonKaydet').show();
+
+    //    $('#' + id + '_buttonSil').hide();
+    //    $('#' + id + '_buttonIptal').show();
+
+
+
+    //});
+</script>

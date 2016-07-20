@@ -1,0 +1,63 @@
+﻿
+@model _Proje_Blog_.Models.ModelArticle
+@{
+    ViewBag.Title = "CreateArticle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container">
+@using (Html.BeginForm("CreateArticle", "Admin"))
+{
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class=".col-md-6 .col-md-offset-3">
+                <div class="well bs-component">
+                   
+                        <fieldset>
+                            <legend>Makale Ekleme</legend>
+                            <div class="form-group">
+                                <label for="inputEmail" class="col-lg-2 control-label">Başlık</label>
+                                <div class="col-lg-10">
+                                    @Html.TextBoxFor(x => x.Subject, new { @class = "form-control", @placeholder = "Başlık..." })
+                                    @*<input type="text" class="form-control" id="inputEmail" placeholder="Email">*@
+                                </div>
+                            </div><br />
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-2 control-label">Kategori</label>
+                                <div class="col-lg-10">
+                                    @Html.DropDownListFor(x => x.CategoryId, Model.Categories, new { @Class = "col-md-4 form-control" })
+                                    @*<input type="password" class="form-control" id="inputPassword" placeholder="Password">*@
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-2 control-label">Özet</label>
+                                <div class="col-lg-10">
+                                    @Html.TextAreaFor(x => x.Summary, new { @Class = "col-md-11 form-control input-lg", @Rows = "5", @placeholder = "Makale Özet..." })
+                                    @*<input type="password" class="form-control" id="inputPassword" placeholder="Password">*@
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-2 control-label">Makale</label>
+                                <div class="col-lg-10">
+                                    @Html.TextAreaFor(x => x.Content, new { @Class = "col-md-11 form-control input-lg", @Rows = "10", @placeholder = "Makale..." })
+                                    @*<input type="password" class="form-control" id="inputPassword" placeholder="Password">*@
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+
+                                    <button type="submit" class="btn btn-primary">YENİ EKLE</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    
+                    <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+</div>

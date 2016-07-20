@@ -1,0 +1,24 @@
+﻿@model List<_Proje_Blog_.Models.ModelArticle>
+@{
+    ViewBag.Title = "Gökhan's Blog";
+    Layout = "~/Views/Shared/_LayoutBlog.cshtml";
+}
+
+
+
+@foreach (var item in Model)
+{
+    <article>
+        <div class="makale-ust">
+            <a href="@Url.Action("Goster","Home",new { id=item.Id})"><h2>@item.Subject</h2></a>
+            <span>@item.InsertDateStr</span>
+            <span>Görüntülenme Sayısı: <strong>@item.ReadCount</strong></span> || <span> Beğeni Sayısı:<strong>@item.LikeCount</strong></span>||<span> Kategori:<strong>@item.CategoryName</strong></span>
+        </div>
+        <hr />
+        <div class="makale-alt">
+            @item.Summary
+
+            <a href="@Url.Action("Goster","Home",new { id=item.Id})" target="_blank">Devamı...</a>
+        </div>
+    </article>
+}

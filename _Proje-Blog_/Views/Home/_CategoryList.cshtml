@@ -1,0 +1,7 @@
+﻿@model List<_Proje_Blog_.Models.ModelCategory>
+
+<li><a href="@Url.Action("Index","Home")">Hepsi</a></li>
+@foreach (var item in Model)
+{
+    <li><a href="@Url.Action("Index","Home",new { catId = item.Id })">@item.Name</a></li>
+}

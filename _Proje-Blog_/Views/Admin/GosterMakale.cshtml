@@ -1,0 +1,29 @@
+﻿@model _Proje_Blog_.Models.ModelArticle
+@{
+    ViewBag.Title = "GosterMakale";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<article id="displayArticle" class="container">
+    <div id="articleHeader">
+        <h2>@Model.Subject</h2>
+
+
+        Kategori:<span>@Model.CategoryName</span>
+        Yayınlanma Tarihi: <span>@Model.InsertDate</span>
+        Beğeni Sayısı:<span>@Model.LikeCount</span>
+        Okunma Sayısı:<span>@Model.ReadCount</span>
+
+    </div>
+    <hr />
+    <div id="articleContent">
+        <p>
+            @Model.Summary
+        </p>
+        @Html.Raw(Model.Content)
+
+    </div>
+    <a href="@Url.Action("EditArticle", "Admin", new { id = Model.Id })" class="btn btn-primary pull-right">Düzenle</a>
+
+</article>

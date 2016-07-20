@@ -1,0 +1,65 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        #login {
+            width: 40%;
+            margin-left: 28%;
+            margin-top: 20%;
+            box-shadow: 0 0 15px 5px #070c9a;
+            text-align: center;
+            padding: 4%;
+            box-sizing: border-box;
+        }
+
+        input {
+            text-align: center;
+            border-radius: 5px;
+            width: 35%;
+        }
+
+            input[type="text"]:focus, input[type="password"]:focus {
+                box-shadow: 0 0 5px 5px #070c9a;
+                border: 1px solid #070c9a;
+            }
+
+        hr {
+            width: 75%;
+        }
+    </style>
+</head>
+<body onload="foo()">
+    <div id="login">
+        @using (Html.BeginForm("Index", "Login"))
+        {
+            <hr />
+            <input type="text" name="userName" placeholder="Kullanıcı Adı..." />
+            <br />
+            <hr />
+            <input type="password" name="pass" placeholder="Parola..." />
+            <br />
+            <hr />
+            <input type="submit" value="Giriş" />
+        }
+        <span id="error" style="font-size:12px;color:red;">@ViewBag.ErrorMessage</span>
+    </div>
+
+    <script>
+        function foo() {
+            var errorElement = document.getElementById("error");
+
+            setTimeout(function () {
+                errorElement.innerHTML = "";
+            },5000)
+        }
+    </script>
+</body>
+</html>

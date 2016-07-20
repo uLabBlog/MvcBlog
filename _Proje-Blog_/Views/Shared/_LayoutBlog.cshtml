@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+
+    <script src="~/scripts/jquery-3.0.0.js"></script>
+    <link href="~/Content/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="container">
+        <header>
+            <br />
+            Gökhan'ın Blogu 'MVC'
+        </header>
+        <content>
+            @RenderBody()
+        </content>
+        <nav>
+            <fieldset>
+                <legend>Kategoriler</legend>
+                <ul id="menu">
+                    @Html.Action("CategoryList", "Home")
+                    @*<li><a href="">Makaleler</a></li>
+                        <li><a href="">Hakkımda</a></li>
+                        <li><a href="">Bana Ulaşın</a></li>*@
+                </ul>
+            </fieldset>
+
+
+            <fieldset>
+                <legend>Gökhan Bezirci</legend>
+                <img id="gbImg" src="~/Content/gb.png" onclick="Git()"/><br />
+                <img src="~/Content/2000px-Linkedin_icon.svg.png" class="icon" />
+                <strong>Gökhan BEZİRCİ</strong><br />
+                <img class="icon" src="~/Content/skype-11.png" />
+                <strong>Gökhan BEZİRCİ</strong><br />
+            </fieldset>
+            <fieldset style="border:0;">
+                <legend>Giriş Yap</legend>
+                <input type="text" placeholder="Kullanıcı Adı..." name="name" value="" /><br />
+                <input type="text" placeholder="Şifre..." name="name" value="" /><br />
+                <input type="button" name="name" value="Giriş" />
+                <input type="button" name="name" value="Kayıt Ol..." />
+            </fieldset>
+        </nav>
+        <div class="temizleyici"></div>
+
+        <footer>
+            &copy; 2016 Gökhan CO
+        </footer>
+    </div>
+    <script>
+        function Git() {
+            window.location="@Url.Action("Index", "Login")";
+        }
+    </script>
+</body>
+</html>

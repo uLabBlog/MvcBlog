@@ -1,0 +1,117 @@
+﻿@model List<_Proje_Blog_.Models.ModelArticle>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Admin</h2>
+
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <th>Başlık</th>
+            <th>Kategori</th>
+            <th>Tarih</th>
+            <th>Görüntülenme Sayısı</th>
+            <th>Beğeni Sayısı</th>
+            <th>Aktif</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(item.Subject, "GosterMakale", new { id=item.Id})
+                @*@item.Subject*@</td>
+                <td>@item.CategoryName</td>
+                <td>@item.InsertDateStr</td>
+                <td>@item.ReadCount</td>
+                <td>@item.LikeCount</td>
+                <td>@Html.CheckBox("isActive", item.isActive, new { id = item.Id, @class = "AllDay" })</td>
+                <td>
+                    <button class="btn btn-danger Article_Sil" type="button" title="Sil" data-id="@item.Id">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-primary Article_Goster" type="button" title="Makale Göster" data-id="@item.Id">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-success Article_Duzenle" type="button" title="Makale Düzenle" data-id="@item.Id">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<script>
+    //Article_Sil
+    $('button.Article_Sil').click(function () {
+        debugger;
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Kesin silinsin mi");
+
+        if (c) {
+            $.ajax({
+                url: "/Admin/DeleteArticle",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result == "OK") {
+                        obj.parent().parent().fadeOut(500);
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+    $('button.Article_Goster').click(function () {
+        debugger;
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Makale Görüntülensin mi?");
+
+        if (c) {
+            $.ajax({
+                url: "/Admin/MakaleGoster",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result.redirectTo) {
+                        window.location.href = result.redirectTo;
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+
+    $('.AllDay').click(function () {
+        var obj = $(this);
+        var articleId = obj.attr("id");
+        debugger;
+
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("ActiveControl", "Admin")',
+            data: { id: articleId },
+            success: function (result) {
+                if (result == "TRUE") {
+                    alert("Makale Aktif Edildi...")
+                }
+                else {
+                    alert("Makale Pasif Edildi....")
+                }
+            },
+            failure: function () {
+                alert("Durum işlemi şuanda gerçekletirilemiyor.")
+            }
+        });
+    });
+</script>

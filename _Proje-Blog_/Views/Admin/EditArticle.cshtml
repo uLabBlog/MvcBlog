@@ -1,0 +1,39 @@
+﻿@model _Proje_Blog_.Models.ModelArticle
+@{
+    ViewBag.Title = "EditArticle";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<article id="displayArticle" class="container">
+    @using (Html.BeginForm("EditArticle", "Admin"))
+    {
+        @Html.HiddenFor(x => x.Id)
+        <div id="articleHeader">
+            <h2>@Html.TextBoxFor(x => x.Subject)</h2>
+
+            Kategori:<span>@Html.DropDownListFor(x => x.CategoryId, Model.Categories)</span>
+            Yayınlanma Tarihi: <span>@Model.InsertDate</span>
+            Beğeni Sayısı:<span>@Model.LikeCount</span>
+            Okunma Sayısı:<span>@Model.ReadCount</span>
+
+        </div>
+        <hr />
+        <div id="articleContent">
+            <p>
+              <span class="col-md-1">Summary</span>  @Html.TextAreaFor(x => x.Summary, new { @Class = "col-md-11", @Rows = "5" })
+            </p>
+            <br />
+
+            <span class="col-md-1">Content</span> @Html.TextAreaFor(x => x.Content, new { @Class = "col-md-11", @Rows = "10" })
+            <br />
+
+        </div>
+        <br />
+        <br />
+
+        <a href="@Url.Action("DisplayArticle", new { id = Model.Id })" class="btn btn-warning">GERİ</a>
+        <input type="submit" value="GÜNCELLE" class="btn btn-success" />
+
+
+    }
+</article>

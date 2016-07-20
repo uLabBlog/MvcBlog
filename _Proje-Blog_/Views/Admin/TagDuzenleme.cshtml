@@ -1,0 +1,68 @@
+﻿@model _Proje_Blog_.EF.Tag
+@{
+    ViewBag.Title = "TagDuzenleme";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>TagDuzenleme</h2>
+
+@*<div style="background-color:#ff6a00;width:50%;margin-left:25%;margin-top:2%;">
+    <div style="height:275px;width:300px;margin-left:35%;margin-top:2%;">
+        <br />
+        <h3 style="text-align:center;">Tag Bilgileri</h3>
+        <hr />
+        <div style="float:left;">
+            Etiket Adı:&nbsp;<br /><hr />
+            Fiyatı:<br /><hr />
+                Stok:<br /><hr />
+                Birim Miktar:<br /><hr />
+        </div>
+        <div style="text-align:center;">
+            @using (Html.BeginForm("TagDuzenleme", "Admin"))
+            {
+                @Html.HiddenFor(x => x.Id)
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })<br /><hr />
+                @Html.TextBoxFor(x => x.urunFiyat)<br /><hr />
+                    @Html.TextBoxFor(x => x.Stok)<br /><hr />
+                    @Html.TextBoxFor(x => x.birimMiktar)<br /><hr />
+                <input type="submit" value="Güncelle" style="width:100px;height:50px;" />
+            }
+        </div>
+    </div>
+</div>*@
+<div class="container">
+    <div class="row">
+
+        <div class=".col-md-6 .col-md-offset-3">
+            <div class="well bs-component">
+                
+                    <fieldset>
+                        <legend>Etiket Düzenle</legend>
+                        @*<div class="form-group">
+                                <label for="inputEmail" class="col-lg-2 control-label">ID</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="inputEmail" placeholder="ID">
+                                </div>
+                            </div>*@
+                        @using (Html.BeginForm("TagDuzenleme", "Admin"))
+                        {
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-lg-2 control-label">Etiket Adı</label>
+                                <div class="col-lg-10">
+                                    @*<input type="password" class="form-control" id="inputPassword" placeholder="Etiket Adı">*@
+                                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "Etiket Adı" })
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" >
+                                <div class="col-lg-10 col-lg-offset-10" style="margin-top:1%;">
+                                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                                </div>
+                            </div>
+                        }
+                    </fieldset>
+                
+            </div>
+        </div>
+    </div>
+</div>

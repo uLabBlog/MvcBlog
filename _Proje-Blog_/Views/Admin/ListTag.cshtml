@@ -1,0 +1,81 @@
+﻿@model List<_Proje_Blog_.Models.ModelTag>
+@{
+    ViewBag.Title = "ListTag";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ListTag</h2>
+
+<div class="container">
+    <table class="table table-hover table-responsive">
+        <tr>
+            <th>ID</th>
+            <th>Ad Etiket</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    <button class="btn btn-danger tag_Sil" type="button" title="Sil" data-id="@item.Id">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-success Tag_Duzenle" type="button" title="Etiket Düzenle" data-id="@item.Id">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<script>
+    debugger;
+    $('button.tag_Sil').click(function () {
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Kesin silinsin mi");
+        debugger;
+        if (c) {
+            $.ajax({
+                url: "/Admin/DeleteTAg",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result == "OK") {
+                        obj.parent().parent().fadeOut(500);
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+
+    $('button.Tag_Duzenle').click(function () {
+        debugger;
+        var obj = $(this);
+        var id = obj.attr("data-id");
+        var c = confirm("Makale Görüntülensin mi?");
+
+        if (c) {
+            $.ajax({
+                url: "/Admin/TagDuzenle",
+                type: "post",
+                data: { id: id },
+                success: function (result) {
+                    if (result.redirectTo) {
+                        window.location.href = result.redirectTo;
+                    }
+                    else {
+                        alert("Bir hata oluştu tekrar deneyin...");
+                    }
+                }
+            });
+        }
+    });
+    
+</script>

@@ -1,0 +1,53 @@
+﻿article {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+
+.makale-alt, .makale-ust {
+    box-shadow: none;
+}
+
+    .makale-ust a {
+        text-decoration: none;
+        color: gray;
+    }
+
+        .makale-ust a:hover {
+            color: darkblue;
+            cursor: pointer;
+        }
+
+#articleHeader, #articleContent {
+    box-shadow: none !important;
+}
+
+#displayArticle {
+    box-shadow: none;
+}
+
+    #displayArticle:hover {
+        background-color: white !important;
+        color: black !important;
+    }
+
+#articleHeader span {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.blogButton {
+    color: azure;
+    background-color: darkblue;
+    height: 25px;
+    width: 70px;
+    margin: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+    .blogButton:hover {
+        color: darkblue;
+        background-color: azure;
+        cursor: pointer;
+    }

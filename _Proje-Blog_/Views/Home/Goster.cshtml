@@ -1,0 +1,115 @@
+﻿@model _Proje_Blog_.Models.ModelArticle
+@{
+    ViewBag.Title = "Goster";
+    Layout = "~/Views/Shared/_LayoutBlog.cshtml";
+}
+
+
+<article id="displayArticle" onload="BegeniKontrol(@Request.ServerVariables["REMOTE_ADDR"].ToString())">
+    <div id="articleHeader">
+        <h2>@Model.Subject</h2>
+
+
+        Kategori:<span>@Model.CategoryName</span>
+        Yayınlanma Tarihi: <span>@Model.InsertDate</span>
+        Beğeni Sayısı:<span>@Model.LikeCount</span>
+        Okunma Sayısı:<span>@Model.ReadCount</span>
+
+    </div>
+    <hr />
+    <div id="articleContent">
+        <p>
+            @Model.Summary
+        </p>
+        @*  Görüntülenecek içerik "Model.Content" şeklinde ekrana basılırsa içerikteki HTML kodları string kabul edilip çalışmaz. Ekranda tagler görünür. Bu sebeple "  @Html.Raw(Model.Content)" şeklinde yazarızki içerikte bulunan HTML kodları çalışır vaziyette ekranda görünsün
+        *@
+        @Html.Raw(Model.Content)
+
+    </div>
+
+    <div id="likePart" style="box-shadow:none !important">
+        <img src="~/Content/unlike.png" style="cursor:pointer;" width="50" height="45" alt="Alternate Text" onclick="Begen(@Model.Id)" />
+        <span>@Model.LikeCount</span>
+    </div>
+
+    @using (Html.BeginForm("Yorum", "Home"))
+    {
+        <div id="comment">
+            <input type="hidden" name="ArticleId" value="@Model.Id" />
+            <input type="text" name="FullName" placeholder="Isim Soyisim..." class="blogText" /><br /><br />
+            <input type="text" name="Email" placeholder="Mail Adresiniz..." class="blogText" /><br /><br />
+            <textarea rows="5" placeholder="Yorumunuz..." name="Content" class="blogText"></textarea><br /><br />
+            <input type="submit" value="Gönder" class="blogButton" />
+        </div>
+    }
+
+    @foreach (var item in Model.comments)
+    {
+        <div class="person-comment">
+            <span style="float:left;color:darkblue;" title="@item.Email">@item.FullName</span>
+            <strong style="float:right;">@item.InsertDateStr</strong>
+            <div style="clear:both;"></div>
+            <p>@item.Content</p>
+
+        </div>
+        <hr />
+    }
+</article>
+<script>
+    function Begen(articleId) {
+
+        debugger;
+
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("Like", "Home")',
+            data: { id: articleId },
+            success: function (result) {
+
+                debugger;
+
+                if (result == "OK") {
+                    //LİKE işlmeleri
+                    var span = document.querySelector("#likePart span");
+                    var sayı = parseInt(span.innerHTML);
+                    span.innerHTML = ++sayı;
+                    document.querySelector("#articleHeader span:nth-child(4)").innerHTML = sayı;
+
+                    var img = document.querySelector("#likePart img");
+                    img.src = img.src.replace("un", "");
+                }
+                else if (result == "ERROR") {
+                    alert("Beğenemediniz....")
+                }
+                else {
+                    alert("Daha önce beğenmişsinzi...")
+                }
+            },
+            failure: function () {
+                alert("Beğeni işlmei şuanda gerçekletirilemiyor.")
+            }
+        });
+    }
+
+    $(document).ready(function BegeniKontrol(clientIp) {
+
+        debugger;
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("LikeControl", "Home")',
+            data: { Ip: clientIp },
+            success: function (result) {
+                debugger;
+                if (result == "OK") {
+                }
+                else {
+                    var img = document.querySelector("#likePart img");
+                    img.src = img.src.replace("un", "");
+                }
+            },
+            failure: function () {
+                alert("Beğeni işlmei şuanda gerçekletirilemiyor.")
+            }
+        });
+    });
+</script>
